@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta  name="viewport"  content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!--<meta name="theme-color" content="#fe5800">-->
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>洛基英语315打假行动</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/data.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+        <script>
+        var openId = localStorage.getItem("openId");
+		var code = getQueryString('code');;
+        var SERVICE_URL = "http://139.196.47.123:8082/rockyAppMc_api/";
+        //获取微信接口
+        var appId = "";
+        var timestamp = "";
+        var nonceStr = "";
+        var signature = "";
+        var jsapi_ticket = "";
+        var url1 = "";
+        var urls = window.location.href;
+		var IMAGE_URL = "http://139.196.47.123:8082/imgShare/";
+        var shareTitle = "我刚协助打击了0个假货，击败了全国0%的人，你也快参与进来吧！";
+        var shareDesc = "315洛基报道- 您好，最近市场上流入一批假货，由于数量过多，请协助警方找出它们并销毁";
+        var shareLink = "http://test.cameltec.cn/game315";
+        $.ajax({
+            type: "post",
+            url: SERVICE_URL + "weChatApi/getSign",
+            async: false,
+            data: {
+                urls:urls
+            },
+            success: function(data) {
+                if(data.result == 1){
+                    var sign = data.sign;
+//                  console.log(sign);
+                    appId = sign.appId;
+                    timestamp = sign.timestamp;
+                    nonceStr = sign.nonceStr;
+                    signature = sign.signature;
+                    jsapi_ticket = sign.jsapi_ticket;
+                    url1 = sign.url;
+                }else{
+                    alert(data.msg);
+                }
+            },
+            error: function(data) {
+                console.log(data);
+                console.log("initError");
+            },
+            dataType: 'json'
+        });
+			wx.config({
+			    debug: false,
+			    appId: appId,
+			    timestamp: timestamp,
+			    nonceStr: nonceStr,
+			    signature: signature,
+			    jsApiList: [
+			      'checkJsApi',
+			      'onMenuShareTimeline',
+			      'onMenuShareAppMessage',
+			      'startRecord',
+			      'stopRecord',
+			      'onVoiceRecordEnd',
+			      'playVoice',
+			      'onVoicePlayEnd',
+			      'pauseVoice',
+			      'stopVoice',
+			      'uploadVoice',
+			      'downloadVoice',
+			      'chooseImage',
+			      'previewImage',
+			      'uploadImage',
+			      'downloadImage'
+			    ]
+			});
+        
+            // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+            wx.ready(function(){
+                //注册获取“分享至朋友圈”状态事件
+                wxShareInit();
+            })
+        //获取重定向code
+		function getQueryString(name) {
+		  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		  var r = window.location.search.substr(1).match(reg);
+		  if (r != null) return unescape(r[2]); return null;
+	  	}
+        
+		//验证是否为空
+        function checkIsEmpty(str) {
+            if(str!=null&&typeof(str)=="string" ){
+                str= str.trim(); 
+            }
+            if (null != str && "" != str && "null" != str) {
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div class="stage">
+        <div class="layer index " id="index">
+            <div class="top"><img src="images/stage/index.png" alt=""></div>
+            <div class="btn"><img src="images/stage/btn-start.png" alt="" onclick="start();"></div>
+        </div>
+        <div class="layer hide" id="main" >
+            <div class="Countdown" id="time">20'00''</div>
+            <div class="wrapper">
+                <span class="tit" id="tit">Apple</span>
+                <div class="line"></div>
+                <div class="img-wrap" id="img-wrap">
+                    <div><span class="thumb-wrap"><img src="" alt=""></span></div>
+                    <div><span class="thumb-wrap"><img src="" alt=""></span></div>
+                </div>
+            </div>
+            <div class="tip ">
+            	<img src="images/stage/tip.png"/>
+            </div>
+        </div>
+        <div class="result hide" id="result">
+        	<section class="content">
+        		<p>太棒了，这次总共销毁<span id="score">20</span>个假货</p>
+        		<p>击败了全国<span id="beat">10%</span>的人</p>
+        		<p>叫上朋友一起来打假吧！</p>
+        		<p class="score">最佳：<span id="bestScore">31</span></p>
+        	</section>
+        	<section class="type">
+        		<h3 onclick="reStart();">继续打假</h3>
+        		<div class="img-group">
+        			<div><span class="thumb-wrap round continue" data-category='all'><img src="images/stage/list0.png"/></span></div>
+        			<div><span class="thumb-wrap round continue" data-category='animal'><img src="images/stage/list1.png"/></span></div>
+        			<div><span class="thumb-wrap round continue" data-category='love'><img src="images/stage/list2.png"/></span></div>
+        			<div><span class="thumb-wrap round continue" data-category='greens'><img src="images/stage/list3.png"/></span></div>
+        		</div>
+        	</section>
+        	
+        	<div class="button">
+        		<button class="share">分享至朋友圈</button>
+        	</div>
+        	<section class="qrcode">
+        		<p>长按二维码下载洛基英语app,一起寻味更多学习乐趣吧</p>
+        		<span class="thumb-wrap">
+        			<img src="images/stage/qrcode.jpg"/>
+        		</span>
+        	</section>
+        </div>
+         <div class="wxShare"></div>
+    </div>
+   
+    <script>
+      	var numRight,numWrong,target,title;
+        var count =0;
+        var Interval;
+        var typeArray =DATA;
+        var typeName ='all';
+        var startGame = false;
+		var markArr = [];
+        var num;
+        var chooseIndex =0;
+        var Right;
+        function wxShareInit(){
+        	wx.onMenuShareTimeline({
+                    title: shareTitle,
+                    link: shareLink,
+                    imgUrl: IMAGE_URL + 'share315.jpg',
+                    trigger: function (res) {
+                        // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+//                      alert('用户点击分享到朋友圈');
+                    },
+                    success: function (res) {
+//                      alert('已分享');
+                    },
+                    cancel: function (res) {
+//                      alert('已取消');
+                    },
+                    fail: function (res) {
+                        alert(JSON.stringify(res));
+                    }
+                });
+                //注册获取“发送给朋友”状态事件
+                wx.onMenuShareAppMessage({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: IMAGE_URL + 'share315.jpg',
+                    trigger: function (res) {
+                        // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+//                      alert('用户点击发送给朋友');
+                    },
+                    success: function (res) {
+//                      alert('已分享');
+                    },
+                    cancel: function (res) {
+//                      alert('已取消');
+                    },
+                    fail: function (res) {
+                        alert(JSON.stringify(res));
+                    }
+                });
+                //分享到QQ
+                wx.onMenuShareQQ({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: IMAGE_URL + 'share315.jpg',
+                    success: function () { 
+                       // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                       // 用户取消分享后执行的回调函数
+                    }
+                });
+                //分享到腾讯微博
+                wx.onMenuShareWeibo({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: IMAGE_URL + 'share315.jpg',
+                    success: function () { 
+                       // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+                //分享到QQ空间
+                wx.onMenuShareQZone({
+                    title: shareTitle,
+                    desc: shareDesc,
+                    link: shareLink,
+                    imgUrl: IMAGE_URL + 'share315.png',
+                    success: function () { 
+                       // 用户确认分享后执行的回调函数
+                    },
+                    cancel: function () { 
+                        // 用户取消分享后执行的回调函数
+                    }
+                });
+        }
+        /*
+         * 点击开始游戏
+         */
+        function start(){
+			$("#index").addClass('hide');
+			$("#main").removeClass('hide');
+			$("#time").html('20' + '\u2032' + '00' + '\u2033');
+			gameInit(typeArray);
+		}
+        /*
+         * 游戏选择图片
+         */
+		function choose(){
+		   	$(".chooseImg").click(function(){
+					var thisTitle  = $(this).parent(".thumb-wrap").data("title");
+			   		if(!startGame){
+			   			var allTime = 20000;
+			        	var time = $("#time");
+			        	Interval = setInterval(function(){
+			        		if(allTime>0){
+			        			time.text(changeTimeStamp(allTime));allTime=allTime-10;
+			        		}else{
+			        			gameEnd();
+			        		}
+			        	},10)
+			        	startGame =true;
+			   		}
+			   		if(thisTitle == title){
+			   			gameInit(typeArray);
+			   			
+			   		}else{
+			   			gameEnd();
+			   		}
+				})
+		 }
+		/*
+		 * 替换数组两个元素
+		 */
+		function swapItems(arr, index1, index2) {
+	        arr[index1] = arr.splice(index2, 1, arr[index1])[0];
+	        return arr;
+	    };
+		/*
+		 * 加载图片
+		 * @parm 数组
+		 */
+		function getUniIndex(n,arr){
+			if(markArr.length == arr.length){
+				return false;
+			}
+			num=getRandom(n,arr.length);
+			if(markArr.indexOf(num)>0){
+				arguments.callee;
+			}else{
+				return num;
+			}	
+		}
+		function getDiffent(a,arr){
+			num = getRandom(0,arr.length);
+			
+			if(a == num){
+				arguments.callee(a,arr);
+			}else{
+				numWrong =num;
+				var Wrong = arr[numWrong];
+				
+				var data = [Right,Wrong]
+				var i = getRandom(0,2);
+				var html ='<div><span class="thumb-wrap" data-title="'+data[1-i].title+'"><img src="'+'images/'+typeName+'/'+data[i].url+'" class="chooseImg"></span></div>'+
+						' <div><span class="thumb-wrap" data-title="'+data[i].title+'"><img src="'+'images/'+typeName+'/'+data[1-i].url+'" class="chooseImg"></span></div>';
+				$("#img-wrap").html(html);
+				count++;
+				
+				choose();
+			}
+		}
+		function gameInit(array){
+			
+				if(chooseIndex == array.length){
+					alert('游戏已结束');
+					window.clearInterval(Interval); 
+					gameEnd();
+					return;
+				}
+				numRight=getRandom(0,array.length-chooseIndex);
+				title = array[numRight].title;
+				Right = array[numRight];
+				$("#tit").text(title);
+				chooseIndex++;
+				getDiffent(numRight,array);
+				swapItems(array,numRight,array.length-length-chooseIndex);
+//				numWrong = getDiffent(numRight,array);
+//				var Wrong = array[numWrong];
+//				var data = [Right,Wrong]
+//				var i = getRandom(0,1);
+//				console.log(data,numWrong);
+//				var html ='<div><span class="thumb-wrap" data-title="'+data[1-i].title+'"><img src="'+'images/'+name+'/'+data[i].url+'" class="chooseImg"></span></div>'+
+//						' <div><span class="thumb-wrap" data-title="'+data[i].title+'"><img src="'+'images/'+name+'/'+data[1-i].url+'" class="chooseImg"></span></div>';
+//				$("#img-wrap").html(html);
+//				count++;
+//				
+//				choose();
+
+			}
+		/*
+		 * 获取随机数
+		 */
+		function getRandom(n, m) {
+            return Math.floor(Math.random() * (n - m) + m);
+        }
+		/*
+		 * 击败多少人
+		 */
+		function beat(o){
+			var result;
+			if(o >= 0&&o<=4){
+            	result = '10%';   
+			}else if(o >= 5&&o<=10){
+				result = '30%';  
+			}else if(o >= 11&&o<=20){
+				result = '50%';  
+			}else if(o >= 21&&o<=40){
+				result = '70%';  
+			}else if(o >= 41&&o<=60){
+				result = '85%';  
+			}else{
+				result = '95%';  
+			}
+			return result;
+		}
+		
+		/*
+		 * 游戏结束
+		 */
+		function gameEnd(){
+			count = count - 1;
+			var bestCount = localStorage.getItem("beforeCount")?localStorage.getItem("beforeCount"):count;
+			if(bestCount<count){
+				bestCount = count;
+			}
+			localStorage.setItem("beforeCount",bestCount);
+			$("#score").text(count);
+   			$("#beat").text(beat(count));
+   			$("#bestScore").text(bestCount);
+   			$("#result").removeClass("hide");
+   			window.clearInterval(Interval); 
+			$("#time").html(0 + "\u2032" + 00 + "\u2033");
+			startGame =false;
+			markArr = [];
+			chooseIndex = 0;
+			//  设置分享标题
+			shareTitle = "我刚协助打击了"+count+"个假货，击败了全国"+beat(count)+"的人，你也快参与进来吧！";
+			wxShareInit();
+			$.ajax({
+				type: "post",
+				url: 'http://139.196.47.123:8082/rockyAppMc_api/weChatApi/counterfeitCount',
+				async: true,
+				data: {},
+				success: function(data) {
+					
+				},
+				error: function(data) {
+					
+				},
+				dataType: 'json'
+			});
+		}
+		/*
+		 * 倒计时
+		 */
+		function changeTimeStamp(num){
+			var distancetime = num;
+			var ms = Math.floor(distancetime%1000)/10;
+            var sec = Math.floor(distancetime/1000%60);
+            var result = sec + "\u2032" + ms + "\u2033";
+            return result;
+		}
+      
+      /*
+       * 请求接口
+       */
+      
+      
+      	/*
+      	 * 重新开始游戏
+      	 */
+      	function reStart(){
+      		$('.continue').click(function(){
+      			var category = $(this).data("category");
+      			if(category == 'all'){
+      				typeArray = DATA;
+      			}else if(category == 'animal'){
+      				typeArray = ANIMAL;
+      			}else if(category == 'love'){
+      				typeArray = LOVE;
+      			}else if(category == 'greens'){
+      				typeArray = GREENS;
+      			}
+      			typeName = category;
+				$("#result").addClass("hide");
+				gameInit(typeArray,typeName);
+				$("#time").html('20' + '\u2032' + '00' + '\u2033');
+				count=0;
+      		})
+      		
+      		$(".share").click(function(){
+      			$(".wxShare").show();
+      		})
+      		$(".wxShare").click(function(){
+      			$(".wxShare").hide();
+      		})
+      	}
+      	
+      
+      	$(function(){
+      		reStart();
+      	})
+    </script>
+</body>
+</html>
