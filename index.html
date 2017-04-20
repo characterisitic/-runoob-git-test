@@ -398,19 +398,7 @@
 			//  设置分享标题
 			shareTitle = "我刚协助打击了"+count+"个假货，击败了全国"+beat(count)+"的人，你也快参与进来吧！";
 			wxShareInit();
-			$.ajax({
-				type: "post",
-				url: 'http://139.196.47.123:8082/rockyAppMc_api/weChatApi/counterfeitCount',
-				async: true,
-				data: {},
-				success: function(data) {
-					
-				},
-				error: function(data) {
-					
-				},
-				dataType: 'json'
-			});
+			
 		}
 		/*
 		 * 倒计时
