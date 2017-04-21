@@ -441,11 +441,7 @@ button {
     width: 100%;
     height: 100%;
 }
-.stage{
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+
 .layer{
   position: absolute;
   z-index: 1;
@@ -457,10 +453,11 @@ button {
 
 .stage{
 	position: relative;
-	background-image: url(../images/stage/bg.jpg);
+	background-image: url(../../images/stage/bg.jpg);
 	background-size: cover;
 	background-repeat: no-repeat;
-	max-width: 640px;
+	max-width: 420px;
+    height: 100%;
 	margin: 0 auto;
 }
 
@@ -570,7 +567,7 @@ section.content:before{
 	content: "";
 	width: 25px;
 	height: 30px;
-	background-image: url(../images/stage/gold_medal.png);
+	background-image: url(../../images/stage/gold_medal.png);
 	background-size: cover;
 	background-repeat: no-repeat;
 	top: 0;
@@ -669,7 +666,7 @@ section.type h3{
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	background-image:url(../images/stage/wxShareArrow.png);
+	background-image:url(../../images/stage/wxShareArrow.png);
 	background-size: 50%;
 	background-color: rgba(0,0,0,0.8);
 	z-index: 100;
@@ -678,5 +675,6 @@ section.type h3{
 	background-repeat: no-repeat; 
 }
 .wxShare.active{
+    
 	display: block;
 }
