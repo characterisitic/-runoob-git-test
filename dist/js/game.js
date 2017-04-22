@@ -121,8 +121,8 @@ var game = function(){
 			swapItems(array,list.numRight,array.length-length-list.chooseIndex);
         },
         gameEnd(){
-            list.count --;
-			var bestCount = localStorage.getItem("beforeCount")?localStorage.getItem("beforeCount"):count;
+            list.count = list.count-1;
+            var bestCount = localStorage.getItem("beforeCount")?localStorage.getItem("beforeCount"):list.count;
 			if(bestCount<list.count){
 				bestCount = list.count;
 			}
